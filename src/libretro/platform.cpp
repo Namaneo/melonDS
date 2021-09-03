@@ -407,7 +407,7 @@ namespace Platform
 #endif
    }
 
-#ifdef HAVE_OPENGL
+#if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES3)
    void* GL_GetProcAddress(const char* proc)
    {
       return (void*)nullptr;

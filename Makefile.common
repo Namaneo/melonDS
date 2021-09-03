@@ -77,6 +77,19 @@ SOURCES_CXX +=  $(MELON_DIR)/GPU_OpenGL.cpp \
 DEFINES += -DHAVE_OPENGL -DOGLRENDERER_ENABLED -DCORE
 endif
 
+ifeq ($(HAVE_OPENGLES3), 1)
+SOURCES_C += $(CORE_DIR)/libretro-common/glsm/glsm.c \
+             $(CORE_DIR)/libretro-common/glsym/rglgen.c \
+             $(CORE_DIR)/libretro-common/glsym/glsym_es3.c
+
+SOURCES_CXX +=  $(MELON_DIR)/GPU_OpenGL.cpp \
+                $(MELON_DIR)/GPU3D_OpenGL.cpp \
+                $(MELON_DIR)/OpenGLSupport.cpp \
+                $(CORE_DIR)/opengl.cpp
+
+DEFINES += -DHAVE_OPENGLES -DHAVE_OPENGLES3 -DOGLRENDERER_ENABLED -DCORE
+endif
+
 ifeq ($(HAVE_THREADS), 1)
 SOURCES_C += $(CORE_DIR)/libretro-common/rthreads/rthreads.c \
              $(CORE_DIR)/libretro-common/rthreads/rsemaphore.c

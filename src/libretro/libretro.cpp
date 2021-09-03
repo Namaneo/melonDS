@@ -118,7 +118,7 @@ void retro_set_environment(retro_environment_t cb)
    struct retro_vfs_interface_info vfs_iface_info;
    environ_cb = cb;
 
-#ifdef HAVE_OPENGL
+#if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES3)
    std::string opengl_resolution = "OpenGL Internal Resolution; ";
 
    static const int MAX_SCALE = 8;
@@ -166,7 +166,7 @@ void retro_set_environment(retro_environment_t cb)
       { "melonds_threaded_renderer", "Threaded software renderer; disabled|enabled" },
 #endif
       { "melonds_touch_mode", "Touch mode; disabled|Mouse|Touch|Joystick" },
-#ifdef HAVE_OPENGL
+#if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES3)
       { "melonds_opengl_renderer", "OpenGL Renderer (Restart); disabled|enabled" },
       { "melonds_opengl_resolution", opengl_resolution.c_str() },
       { "melonds_opengl_better_polygons", "OpenGL Improved polygon splitting; disabled|enabled" },
@@ -313,7 +313,7 @@ static void check_variables(bool init)
          new_touch_mode = TouchMode::Joystick;
    }
 
-#ifdef HAVE_OPENGL
+#if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES3)
    bool gl_update = false;
 
    if(input_state.current_touch_mode != new_touch_mode) // Hide the cursor
@@ -438,7 +438,7 @@ static void render_frame(void)
 {
    if (current_renderer == CurrentRenderer::None)
    {
- #ifdef HAVE_OPENGL
+ #if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES3)
          if (enable_opengl && using_opengl)
          {
             // Try to initialize opengl, if it failed fallback to software
@@ -454,11 +454,11 @@ static void render_frame(void)
             if(using_opengl) deinitialize_opengl_renderer();
 #endif
             current_renderer = CurrentRenderer::Software;
-#ifdef HAVE_OPENGL
+#if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES3)
          }
 #endif
    }
-#ifdef HAVE_OPENGL
+#if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES3)
    if(using_opengl)
    {
       if (current_renderer == CurrentRenderer::Software) render_opengl_frame(true);
@@ -494,7 +494,7 @@ static void render_frame(void)
 
          video_cb((uint8_t*)screen_layout_data.buffer_ptr, screen_layout_data.buffer_width, screen_layout_data.buffer_height, screen_layout_data.buffer_width * sizeof(uint32_t));
       }
-#ifdef HAVE_OPENGL
+#if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES3)
    }
 #endif
 }
@@ -658,7 +658,7 @@ bool retro_load_game(const struct retro_game_info *info)
    check_variables(true);
 
    // Initialize the opengl state if needed
-#ifdef HAVE_OPENGL
+#if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES3)
    if (enable_opengl)
       initialize_opengl();
 #endif

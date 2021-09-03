@@ -35,6 +35,13 @@
 #include "GPU_OpenGL.h"
 #endif
 
+#ifdef HAVE_OPENGLES3
+#define GL_BGRA                       GL_BGRA_EXT
+#define GL_WRITE_ONLY                 GL_WRITE_ONLY_OES
+#define GL_READ_ONLY                  0x88B9
+#define GL_UNSIGNED_SHORT_1_5_5_5_REV GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT
+#endif
+
 namespace GPU
 {
 
