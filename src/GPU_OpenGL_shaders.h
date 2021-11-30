@@ -19,7 +19,7 @@
 #ifndef GPU_OPENGL_SHADERS_H
 #define GPU_OPENGL_SHADERS_H
 
-const char* kCompositorVS = R"(#version 140
+const char* kCompositorVS = R"(#version 300 es
 
 in vec2 vPosition;
 in vec2 vTexcoord;
@@ -38,7 +38,10 @@ void main()
 }
 )";
 
-const char* kCompositorFS_Nearest = R"(#version 140
+const char* kCompositorFS_Nearest = R"(#version 300 es
+
+precision mediump float;
+precision mediump usampler2D;
 
 uniform uint u3DScale;
 uniform int u3DXPos;
@@ -73,8 +76,8 @@ void main()
             // 3D on top, blending
 
             float xpos = fTexcoord.x + _3dxpos;
-            float ypos = mod(fTexcoord.y, 192);
-            ivec4 _3dpix = ivec4(texelFetch(_3DTex, ivec2(vec2(xpos, ypos)*u3DScale), 0).bgra
+            float ypos = mod(fTexcoord.y, 192.0);
+            ivec4 _3dpix = ivec4(texelFetch(_3DTex, ivec2(vec2(xpos, ypos)*float(u3DScale)), 0).bgra
                          * vec4(63,63,63,31));
 
             if (_3dpix.a > 0)
@@ -94,8 +97,8 @@ void main()
             // 3D on bottom, blending
 
             float xpos = fTexcoord.x + _3dxpos;
-            float ypos = mod(fTexcoord.y, 192);
-            ivec4 _3dpix = ivec4(texelFetch(_3DTex, ivec2(vec2(xpos, ypos)*u3DScale), 0).bgra
+            float ypos = mod(fTexcoord.y, 192.0);
+            ivec4 _3dpix = ivec4(texelFetch(_3DTex, ivec2(vec2(xpos, ypos)*float(u3DScale)), 0).bgra
                          * vec4(63,63,63,31));
 
             if (_3dpix.a > 0)
@@ -114,8 +117,8 @@ void main()
             // 3D on top, normal/fade
 
             float xpos = fTexcoord.x + _3dxpos;
-            float ypos = mod(fTexcoord.y, 192);
-            ivec4 _3dpix = ivec4(texelFetch(_3DTex, ivec2(vec2(xpos, ypos)*u3DScale), 0).bgra
+            float ypos = mod(fTexcoord.y, 192.0);
+            ivec4 _3dpix = ivec4(texelFetch(_3DTex, ivec2(vec2(xpos, ypos)*float(u3DScale)), 0).bgra
                          * vec4(63,63,63,31));
 
             if (_3dpix.a > 0)
@@ -165,7 +168,9 @@ void main()
 
 
 
-const char* kCompositorFS_Linear = R"(#version 140
+const char* kCompositorFS_Linear = R"(#version 300 es
+
+precision mediump float;
 
 uniform uint u3DScale;
 
@@ -178,7 +183,7 @@ out vec4 oColor;
 
 ivec4 Get3DPixel(vec2 pos)
 {
-    return ivec4(texelFetch(_3DTex, ivec2(pos*u3DScale), 0).bgra
+    return ivec4(texelFetch(_3DTex, ivec2(pos*float(u3DScale)), 0).bgra
          * vec4(63,63,63,31));
 }
 
@@ -259,7 +264,7 @@ void main()
         float yfract = fract(fTexcoord.y);
 
         float xpos = val3.r + xfract;
-        float ypos = mod(fTexcoord.y, 192);
+        float ypos = mod(fTexcoord.y, 192.0);
         ivec4 _3dpix = Get3DPixel(vec2(xpos,ypos));
 
         ivec4 p00 = GetFullPixel(val1, val2, val3, _3dpix);
@@ -325,7 +330,7 @@ void main()
 
 // HUGE TEST ZONE ARRLGD
 
-const char* kCompositorVS_xBRZ = R"(#version 140
+const char* kCompositorVS_xBRZ = R"(#version 300 es
 
 #define BLEND_NONE 0
 #define BLEND_NORMAL 1
@@ -406,7 +411,7 @@ void main()
 }
 )";
 
-const char* kCompositorFS_xBRZ = R"(#version 140
+const char* kCompositorFS_xBRZ = R"(#version 300 es
 
 #define BLEND_NONE 0
 #define BLEND_NORMAL 1
@@ -482,7 +487,7 @@ vec4 Get2DPixel(vec2 texcoord, int level)
 
 ivec4 Get3DPixel(vec2 pos)
 {
-    return ivec4(texelFetch(_3DTex, ivec2(pos*u3DScale), 0).bgra
+    return ivec4(texelFetch(_3DTex, ivec2(pos*float(u3DScale)), 0).bgra
          * vec4(63,63,63,31));
 }
 
@@ -765,7 +770,7 @@ void main()
         int eva, evb, evy;
 
         float xpos = val3.r + fract(fTexcoord.x);
-        float ypos = mod(fTexcoord.y, 192);
+        float ypos = mod(fTexcoord.y, 192.0);
         ivec4 _3dpix = Get3DPixel(vec2(xpos, ypos));
 
         if (compmode == 4)

@@ -19,7 +19,7 @@
 #ifndef MAIN_SHADERS_H
 #define MAIN_SHADERS_H
 
-const char* kScreenVS = R"(#version 140
+const char* kScreenVS = R"(#version 300 es
 
 uniform vec2 uScreenSize;
 uniform mat2x3 uTransform;
@@ -46,7 +46,7 @@ void main()
 }
 )";
 
-const char* kScreenFS = R"(#version 140
+const char* kScreenFS = R"(#version 300 es
 
 uniform sampler2D ScreenTex;
 
