@@ -16,7 +16,11 @@
     with melonDS. If not, see http://www.gnu.org/licenses/.
 */
 
-const char* vertex_shader = R"(#version 140
+const char* vertex_shader = R"(#version 300 es
+
+precision mediump int;
+precision mediump float;
+
 layout(std140) uniform uConfig
 {
     vec2 uScreenSize;
@@ -31,7 +35,7 @@ void main()
 {
     vec4 fpos;
     fpos.xy = ((pos * 2.0) / uScreenSize) - 1.0;
-    fpos.y *= -1;
+    fpos.y *= -1.0;
     fpos.z = 0.0;
     fpos.w = 1.0;
     gl_Position = fpos;
@@ -39,7 +43,11 @@ void main()
 }
 )";
 
-const char* fragment_shader = R"(#version 140
+const char* fragment_shader = R"(#version 300 es
+
+precision mediump int;
+precision mediump float;
+
 layout(std140) uniform uConfig
 {
     vec2 uScreenSize;

@@ -41,7 +41,6 @@ static bool setup_opengl(void)
 
    glBindAttribLocation(shader[2], 0, "vPosition");
    glBindAttribLocation(shader[2], 1, "vTexcoord");
-   glBindFragDataLocation(shader[2], 0, "oColor");
 
    if (!OpenGL::LinkShaderProgram(shader))
       return false;
@@ -171,9 +170,7 @@ void setup_opengl_frame_state(void)
    GL_ShaderConfig.cursorPos[3] = -1.0f;
 
    glBindBuffer(GL_UNIFORM_BUFFER, ubo);
-   void* unibuf = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
-   if (unibuf) memcpy(unibuf, &GL_ShaderConfig, sizeof(GL_ShaderConfig));
-   glUnmapBuffer(GL_UNIFORM_BUFFER);
+   glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GL_ShaderConfig), &GL_ShaderConfig);
 
    float screen_width = (float)screen_layout_data.screen_width;
    float screen_height = (float)screen_layout_data.screen_height;
@@ -299,7 +296,7 @@ void setup_opengl_frame_state(void)
          SETVERTEX(10, primary_x + screen_width, 0.0f, 1.0f, 0.0f); // top right
          SETVERTEX(11, primary_x + screen_width, 0.0f + screen_height, 1.0f, 0.5f - pixel_pad); // bottom right
       }
-      
+
 
       //Bottom Screen
       if(screen_layout_data.hybrid_small_screen == SmallScreenLayout::SmallScreenBottom && screen_layout_data.displayed_layout == ScreenLayout::HybridTop)
@@ -380,9 +377,7 @@ void render_opengl_frame(bool sw)
       GL_ShaderConfig.cursorPos[3] = (((float)(input_state.touch_y) + (float)(CURSOR_SIZE)) / ((float)VIDEO_WIDTH * 1.5)) + 0.5f;
 
       glBindBuffer(GL_UNIFORM_BUFFER, ubo);
-      void* unibuf = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
-      if (unibuf) memcpy(unibuf, &GL_ShaderConfig, sizeof(GL_ShaderConfig));
-      glUnmapBuffer(GL_UNIFORM_BUFFER);
+      glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GL_ShaderConfig), &GL_ShaderConfig);
    }
 
    OpenGL::UseShaderProgram(shader);

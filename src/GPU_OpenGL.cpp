@@ -45,7 +45,6 @@ bool GLCompositor::Init()
 
         glBindAttribLocation(CompShader[i][2], 0, "vPosition");
         glBindAttribLocation(CompShader[i][2], 1, "vTexcoord");
-        glBindFragDataLocation(CompShader[i][2], 0, "oColor");
 
         if (!OpenGL::LinkShaderProgram(CompShader[i]))
             return false;
@@ -160,7 +159,7 @@ void GLCompositor::SetRenderSettings(RenderSettings& settings)
 
         GLenum fbassign[] = {GL_COLOR_ATTACHMENT0};
         glBindFramebuffer(GL_FRAMEBUFFER, CompScreenOutputFB[i]);
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, CompScreenOutputTex[i], 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, CompScreenOutputTex[i], 0);
         glDrawBuffers(1, fbassign);
     }
 
@@ -190,7 +189,7 @@ void GLCompositor::RenderFrame()
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_STENCIL_TEST);
     glDisable(GL_BLEND);
-    glColorMaski(0, GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
     glViewport(0, 0, ScreenW, ScreenH);
 
